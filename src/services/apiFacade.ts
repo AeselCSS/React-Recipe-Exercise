@@ -23,36 +23,36 @@ interface Info {
 }
 
 let categories: Array<string> = [];
-let recipes: Array<Recipe> = [];
+const recipes: Array<Recipe> = [];
 
-async function getCategories(): Promise<Array<string>> {
+const getCategories = async (): Promise<string[]> => {
   if (categories.length > 0) return [...categories];
   const res = await fetch(CATEGORIES_URL).then(handleHttpErrors);
   categories = [...res];
   return categories;
 }
-async function getRecipes(category: string | null): Promise<Array<Recipe>> {
-  //if (recipes.length > 0) return [...recipes];
+ const getRecipes = async (category: string | null): Promise<Recipe[]> => {
+  if (recipes.length > 0) return [...recipes];
   console.log("category", category);
   const queryParams = category ? "?category=" + category : "";
   return fetch(RECIPE_URL + queryParams).then(handleHttpErrors);
 }
-async function getRecipe(id: number): Promise<Recipe> {
-  //if (recipes.length > 0) return [...recipes];
+const getRecipe = async (id: number): Promise<Recipe> => {
+  // if (recipes.length > 0) return [...recipes];
   return fetch(RECIPE_URL + "/" + id).then(handleHttpErrors);
 }
-async function addRecipe(newRecipe: Recipe): Promise<Recipe> {
+const addRecipe = async (newRecipe: Recipe): Promise<Recipe> => {
   const method = newRecipe.id ? "PUT" : "POST";
   const options = makeOptions(method, newRecipe);
   const URL = newRecipe.id ? `${RECIPE_URL}/${newRecipe.id}` : RECIPE_URL;
   return fetch(URL, options).then(handleHttpErrors);
 }
-async function deleteRecipe(id: number): Promise<Recipe> {
+const deleteRecipe = async (id: number): Promise<Recipe> => {
   const options = makeOptions("DELETE", null);
   return fetch(`${RECIPE_URL}/${id}`, options).then(handleHttpErrors);
 }
 
-async function getInfo(): Promise<Info> {
+const getInfo = async (): Promise<Info> => {
   return fetch(INFO_URL).then(handleHttpErrors);
 }
 

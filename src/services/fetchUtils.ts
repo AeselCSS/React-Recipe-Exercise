@@ -4,7 +4,7 @@
  * @param body  The request body (only relevant for POST and PUT)
  * @returns 
  */
-export function makeOptions(method: string, body: object | null): RequestInit {
+export const makeOptions = (method: string, body: object | null): RequestInit => {
   const opts: RequestInit = {
     method: method,
     headers: {
@@ -22,7 +22,7 @@ export function makeOptions(method: string, body: object | null): RequestInit {
  * Utility Method to handle http-errors returned as a JSON-response with fetch
  * Meant to be used in the first .then() clause after a fetch-call
  */
-export async function handleHttpErrors(res:Response) {
+export const handleHttpErrors = async (res:Response)=> {
   if (!res.ok) {
     const errorResponse = await res.json();
     const msg = errorResponse.message ? errorResponse.message:"No details provided"
