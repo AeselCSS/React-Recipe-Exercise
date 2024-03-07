@@ -1,7 +1,9 @@
 import { Route, Routes } from "react-router-dom";
 import Home from "../Home";
-import { Categories, Recipe, RecipeForm, RecipesLayout } from "../recipes";
+import { Recipe, RecipeForm, RecipesLayout } from "../recipes";
 import { Login, Logout, RequireAuth } from "../security";
+import {Categories, CategoryForm} from "../categories";
+import SignUp from "../security/SignUp.tsx";
 
 
 const AppRoutes = () => {
@@ -12,12 +14,19 @@ const AppRoutes = () => {
             <Route path="/recipes" element={<RecipesLayout/>}>
                 <Route path=":id" element={<Recipe />} />
             </Route>
-            <Route path="/add" element={
-                <RequireAuth roles={["ADMIN"]}>
+            <Route path="/add-recipe" element={
+                <RequireAuth roles={["ADMIN", "USER"]}>
                     <RecipeForm />
                 </RequireAuth>
             }
             />
+            <Route path="/add-category" element={
+                <RequireAuth roles={["ADMIN"]}>
+                    <CategoryForm />
+                </RequireAuth>
+            }
+            />
+            <Route path="/user-with-role" element={<SignUp />} />
             <Route path="/login" element={<Login />} />
              <Route path="/logout" element={<Logout />} />
 

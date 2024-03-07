@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getCategories } from "../services/apiFacade";
+import { getCategories } from "../services/apiFacade.ts";
 import {Link} from "react-router-dom";
 
 const Categories = () => {

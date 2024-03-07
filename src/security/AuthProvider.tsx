@@ -1,13 +1,13 @@
 import { createContext, useState, ReactNode } from "react";
-import { fakeAuthProvider, User } from "../services/authFacade";
+import { authProvider, User } from "../services/authFacade";
 import { useContext } from "react";
-import { LoginResponse, LoginRequest } from "../services/authFacade";
 
 
 interface AuthContextType {
     username: string|null;
     signIn: (user: User) => Promise<LoginResponse>;
     signOut: () => void;
+    signUp: (user: SignUpRequest) => Promise<SignUpResponse>;
     isLoggedIn: () => boolean;
     isLoggedInAs: (role: string[]) => boolean;
 }
@@ -20,7 +20,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [username, setUsername] = useState<string | null>(initialUsername);
 
     const signIn = async (user_: LoginRequest) => {
-        return fakeAuthProvider.signIn(user_).then((user) => {
+        return authProvider.signIn(user_).then((user) => {
             setUsername(user.username)
             localStorage.setItem("username",user.username)
             localStorage.setItem("roles",JSON.stringify(user.roles))
@@ -37,16 +37,40 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         localStorage.removeItem("roles");
     };
 
-    const isLoggedIn = () => {
-        return username != null;
+    const signUp = async (user: SignUpRequest):Promise<SignUpResponse> => {
+        return authProvider.signUp(user).then((user) => {
+            return user as SignUpResponse;
+        });
     }
+
+    const isLoggedIn = () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+        return false;
+    }
+
+    const jwtPayload = JSON.parse(atob(token.split('.')[1]));
+    const exp = jwtPayload.exp;
+
+    if (!exp) {
+        return false;
+    }
+
+    const expirationDate = new Date(exp * 1000);
+    if (new Date() > expirationDate) {
+        signOut();
+        return false;
+    }
+
+    return username != null;
+}
 
     const isLoggedInAs = (role: string[]) => {
         const roles:Array<string> = JSON.parse(localStorage.getItem("roles") || '[]');
         return roles?.some((r) => role.includes(r)) || false;
     }
 
-    const value = { username, isLoggedIn, isLoggedInAs, signIn, signOut };
+    const value = { username, isLoggedIn, isLoggedInAs, signIn, signOut, signUp };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

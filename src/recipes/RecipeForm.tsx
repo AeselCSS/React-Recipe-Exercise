@@ -6,6 +6,7 @@ import { useLocation } from "react-router-dom";
 const EMPTY_RECIPE = {
   id: null,
   name: "",
+  owner: "",
   category: "",
   instructions: "",
   thumb: "",
@@ -55,6 +56,11 @@ const RecipeForm = () => {
         <div className="form-group">
           <label htmlFor="id">ID:</label>
           <input type="text" id="name" name="name" disabled value={formData.id || ""} />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="owner">Owner:</label>
+          <input type="text" id="owner" name="owner" value={formData.owner} onChange={handleChange} required />
         </div>
         <div className="form-group">
           <label htmlFor="name">Name:</label>

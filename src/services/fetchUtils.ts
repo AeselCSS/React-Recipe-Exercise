@@ -2,16 +2,25 @@
  * Utility Method to create options for a fetch call
  * @param method GET, POST, PUT, DELETE
  * @param body  The request body (only relevant for POST and PUT)
- * @returns 
+ * @param token
+ * @returns
  */
-export const makeOptions = (method: string, body: object | null): RequestInit => {
+
+export const makeOptions = (method: string, body: object | null, token?: string | null): RequestInit => {
+  const headers: HeadersInit = {
+    "Content-type": "application/json",
+    Accept: "application/json",
+  };
+
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
   const opts: RequestInit = {
     method: method,
-    headers: {
-      "Content-type": "application/json",
-      Accept: "application/json",
-    },
+    headers: headers,
   };
+
   if (body) {
     opts.body = JSON.stringify(body);
   }

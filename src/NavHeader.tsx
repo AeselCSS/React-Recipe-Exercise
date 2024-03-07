@@ -18,9 +18,14 @@ const NavHeader = () => {
         <li>
            <NavLink to="/recipes">Recipes</NavLink>
         </li>
+          {auth.isLoggedInAs(["ADMIN", "USER"]) && (
+              <li>
+                  <NavLink to="/add-recipe">Add Recipe</NavLink>
+              </li>
+          )}
           {auth.isLoggedInAs(["ADMIN"]) && (
               <li>
-                  <NavLink to="/add">Add</NavLink>
+                  <NavLink to="/add-category">Add Category</NavLink>
               </li>
           )}
 

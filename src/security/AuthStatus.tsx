@@ -6,9 +6,14 @@ const AuthStatus = () => {
 
     if (!auth.isLoggedIn()) {
         return (
+            <>
             <li>
                 <NavLink to="/login">Login</NavLink>
             </li>
+            <li>
+                <NavLink to="/user-with-role">Sign Up</NavLink>
+            </li>
+            </>
         );
     } else {
         return (
